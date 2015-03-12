@@ -1,0 +1,7 @@
+# Extend or delete the User-Roles database with this list.
+User[] users
+
+# If true, load, else attempt to unload them.
+bool load
+---
+bool result

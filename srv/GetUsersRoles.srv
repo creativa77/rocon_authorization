@@ -1,0 +1,6 @@
+# Get roles for a specific user
+
+# Name of the user
+string name
+---
+string[] roles
