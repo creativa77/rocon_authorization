@@ -49,26 +49,25 @@ class UsersManager(object):
         self._users_table = UsersTable()
         self._services = self._setup_services()
 
-        # TODO: load the *.users file dinamically
-        users_yaml_path = '/opt/ros/indigo/share/chatter_concert/services/chatter/chatter.users'
-
         # Load pre-configured users
-        try:
-            msg_users = users.load_msgs_from_yaml_file(users_yaml_path)
-            (new_users, invalid_users) = self._users_table.load(msg_users)
+        users_resource = self._parameters['users']
+        if users_resource:
+            try:
+                msg_users = users.load_msgs_from_yaml_resource(users_resource)
+                (new_users, invalid_users) = self._users_table.load(msg_users)
 
-            for u in new_users:
-                rospy.loginfo("Users : loading %s [%s]" %
-                              (u.name, u.role))
-            for u in invalid_users:
-                rospy.logwarn("Users : failed to load %s [%s]" %
+                for u in new_users:
+                    rospy.loginfo("Users : loading %s [%s]" %
                                   (u.name, u.role))
-        except YamlResourceNotFoundException as e:
-            rospy.logerr("Users : failed to load resource %s [%s]" %
+                for u in invalid_users:
+                    rospy.logwarn("Users : failed to load %s [%s]" %
+                                      (u.name, u.role))
+            except YamlResourceNotFoundException as e:
+                rospy.logerr("Users : failed to load resource %s [%s]" %
+                                 (resource_name, str(e)))
+            except MalformedInteractionsYaml as e:
+                rospy.logerr("Users : pre-configured users yaml malformed [%s][%s]" %
                              (resource_name, str(e)))
-        except MalformedInteractionsYaml as e:
-            rospy.logerr("Users : pre-configured users yaml malformed [%s][%s]" %
-                         (resource_name, str(e)))
 
     def spin(self):
         '''
