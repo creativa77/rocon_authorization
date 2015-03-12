@@ -92,13 +92,13 @@ class UsersManager(object):
     ##########################################################################
 
     def _ros_service_get_users_roles(self, request):
-        '''
+         '''
           Get roles assigned to a user.
 
           @param request user's name
           @type auhtorization_srvs.GetUsersRolesRequest
         '''
-        user_name = request.name
+       user_name = request.name
         if user_name == '':
             rospy.logerr("Users: received request for roles with empty user's name")
             role_list = []

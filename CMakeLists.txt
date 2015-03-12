@@ -10,12 +10,13 @@ project(rocon_authorization)
 ##############################################################################
 
 find_package(catkin REQUIRED COMPONENTS)
-catkin_package()
+
+file(GLOB_RECURSE ${PROJECT_NAME}_MODULE_SOURCES RELATIVE ${PROJECT_SOURCE_DIR} src/*.py)
+file(GLOB_RECURSE ${PROJECT_NAME}_SCRIPT_SOURCES RELATIVE ${PROJECT_SOURCE_DIR} scripts/*)
 
 catkin_python_setup()
 
-#file(GLOB_RECURSE ${PROJECT_NAME}_MODULE_SOURCES RELATIVE ${PROJECT_SOURCE_DIR} src/*.py)
-#file(GLOB_RECURSE ${PROJECT_NAME}_SCRIPT_SOURCES RELATIVE ${PROJECT_SOURCE_DIR} scripts/*)
+catkin_package()
 
 ##############################################################################
 # Installs
@@ -23,6 +24,6 @@ catkin_python_setup()
 
 install(
     PROGRAMS
-        scripts/users_manager
+        scripts/users_manager.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
