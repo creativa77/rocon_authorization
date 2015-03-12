@@ -36,6 +36,7 @@ class UsersManager(object):
         '_users_table',
         '_parameters',
         '_services',
+        '_watch_loop_period'
     ]
 
     ##########################################################################
@@ -43,6 +44,7 @@ class UsersManager(object):
     ##########################################################################
 
     def __init__(self):
+        self._watch_loop_period = 1.0
         self._parameters = self._setup_parameters()
         self._users_table = UsersTable()
         self._services = self._setup_services()
@@ -67,6 +69,13 @@ class UsersManager(object):
         except MalformedInteractionsYaml as e:
             rospy.logerr("Users : pre-configured users yaml malformed [%s][%s]" %
                          (resource_name, str(e)))
+
+    def spin(self):
+        '''
+          Loop around.
+        '''
+        while not rospy.is_shutdown():
+            rospy.rostime.wallsleep(self._watch_loop_period)
 
     def _setup_services(self):
         '''
