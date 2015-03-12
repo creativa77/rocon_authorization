@@ -94,7 +94,7 @@ class UsersTable(object):
         invalid = []
         for msg in msgs:
             try:
-                user = interactions.User(msg)
+                user = users.User(msg)
                 self._users.append(user)
                 self._users = list(set(self._users))  # uniquify the list, just in case
                 new.append(user)

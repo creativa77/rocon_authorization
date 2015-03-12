@@ -33,7 +33,6 @@ import rocon_python_utils
 import rocon_authorization.msg as user_msgs
 
 from .exceptions import InvalidInteraction, MalformedInteractionsYaml, YamlResourceNotFoundException
-from . import web_interactions
 
 ##############################################################################
 # Utility Methods

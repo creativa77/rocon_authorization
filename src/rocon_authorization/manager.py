@@ -52,7 +52,7 @@ class UsersManager(object):
 
         # Load pre-configured users
         try:
-            msg_users = users.load_users_from_yaml_file(users_yaml_path)
+            msg_users = users.load_msgs_from_yaml_file(users_yaml_path)
             (new_users, invalid_users) = self._users_table.load(msg_users)
 
             for u in new_users:
