@@ -53,7 +53,7 @@ class UsersManager(object):
         users_resource = self._parameters['users']
         if users_resource:
             try:
-                msg_users = users.load_msgs_from_yaml_resource(users_resource)
+                msg_users = users.load_msgs_from_yaml_file(users_resource)
                 (new_users, invalid_users) = self._users_table.load(msg_users)
 
                 for u in new_users:
