@@ -22,9 +22,6 @@ some set of users.
 # Imports
 ##############################################################################
 
-import rocon_console.console as console
-import rocon_uri
-
 from . import users
 from .exceptions import InvalidInteraction
 
@@ -48,7 +45,8 @@ class UsersTable(object):
         """
         self._users = []
 
-    #TODO: maybe remove this method, for security reasons. We don't want to expose all users available.
+    #TODO: maybe remove this method, for security reasons
+    # We don't want to expose all users available
     def users(self):
         '''
           List stored users.
@@ -67,7 +65,8 @@ class UsersTable(object):
           :rtype: str[]
         '''
         if user:
-             return list(set([u.role for u in self._users if u.name == user]))
+            return list(
+                set([u.role for u in self._users if u.name == user]))
         else:
             return list(set([u.role for u in self._users]))
 
@@ -85,10 +84,12 @@ class UsersTable(object):
         '''
           Load some users into the users table.
 
-          :param msgs: a list of user specifications to populate the table with.
+          :param msgs: a list of user specifications to populate the
+                       table with.
           :type msgs: rocon_interaction_msgs.User_ []
           :returns: list of all additions and any that were flagged as invalid
-          :rtype: (:class:`.User` [], rocon_interaction_msgs.User_ []) : (new, invalid)
+          :rtype: (:class:`.User` [],
+                   rocon_interaction_msgs.User_ []) : (new, invalid)
         '''
         new = []
         invalid = []
@@ -96,7 +97,7 @@ class UsersTable(object):
             try:
                 user = users.User(msg)
                 self._users.append(user)
-                self._users = list(set(self._users))  # uniquify the list, just in case
+                self._users = list(set(self._users))
                 new.append(user)
             except InvalidInteraction:
                 invalid.append(msg)
@@ -115,9 +116,9 @@ class UsersTable(object):
         removed = []
         for msg in msgs:
             found = next((user for user in self._users
-                            if user.name == msg.name and user.role == msg.role), None)
+                          if user.name == msg.name and user.role == msg.role),
+                         None)
             if found is not None:
                 removed.append(msg)
                 self._users.remove(found)
         return removed
-
