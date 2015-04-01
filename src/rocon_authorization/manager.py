@@ -23,7 +23,8 @@ import rocon_authorization.srv as authorization_srvs
 
 from .users_table import UsersTable
 from . import users
-from .exceptions import MalformedInteractionsYaml, YamlResourceNotFoundException
+from .exceptions import MalformedInteractionsYaml, \
+    YamlResourceNotFoundException
 
 
 ##############################################################################
@@ -61,13 +62,13 @@ class UsersManager(object):
                                   (u.name, u.role))
                 for u in invalid_users:
                     rospy.logwarn("Users : failed to load %s [%s]" %
-                                      (u.name, u.role))
+                                  (u.name, u.role))
             except YamlResourceNotFoundException as e:
                 rospy.logerr("Users : failed to load resource %s [%s]" %
-                                 (resource_name, str(e)))
+                             (users_resource, str(e)))
             except MalformedInteractionsYaml as e:
-                rospy.logerr("Users : pre-configured users yaml malformed [%s][%s]" %
-                             (resource_name, str(e)))
+                rospy.logerr("Users : pre-configured users yaml malformed"
+                             "[%s][%s]" % (users_resource, str(e)))
 
     def spin(self):
         '''
@@ -78,16 +79,18 @@ class UsersManager(object):
 
     def _setup_services(self):
         '''
-          These are all public services. Typically that will drop them into the /concert
-          namespace.
+          These are all public services. Typically that will drop them into the
+          /concert namespace.
         '''
         services = {}
-        services['get_users_roles'] = rospy.Service('~get_users_roles',
-                                              authorization_srvs.GetUsersRoles,
-                                              self._ros_service_get_users_roles)
-        services['set_users_roles'] = rospy.Service('~set_users_roles',
-                                                     authorization_srvs.SetUsersRoles,
-                                                     self._ros_service_set_users_roles)
+        services['get_users_roles'] = \
+            rospy.Service('~get_users_roles',
+                          authorization_srvs.GetUsersRoles,
+                          self._ros_service_get_users_roles)
+        services['set_users_roles'] = \
+            rospy.Service('~set_users_roles',
+                          authorization_srvs.SetUsersRoles,
+                          self._ros_service_set_users_roles)
         return services
 
     def _setup_parameters(self):
@@ -108,7 +111,8 @@ class UsersManager(object):
         '''
         user_name = request.name
         if user_name == '':
-            rospy.logerr("Users: received request for roles with empty user's name")
+            rospy.logerr("Users: received request for roles with "
+                         "empty user's name")
             role_list = []
         else:
             user_roles = self._users_table.roles(user_name)
@@ -130,7 +134,8 @@ class UsersManager(object):
             for u in new_users:
                 rospy.loginfo("Users : loading %s [%s]" % (u.name, u.role))
             for u in invalid_users:
-                rospy.logwarn("Users : failed to load %s [%s]" (u.name, u.role))
+                rospy.logwarn("Users : failed to load %s [%s]" %
+                              (u.name, u.role))
         else:
             removed_users = self._users_table.unload(request.users)
             for u in removed_users:
@@ -139,4 +144,3 @@ class UsersManager(object):
         response = authorization_srvs.SetUsersRolesResponse()
         response.result = True
         return response
-
